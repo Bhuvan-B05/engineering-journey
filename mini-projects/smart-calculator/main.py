@@ -60,6 +60,7 @@ def menu():# Display Menu of commands
     print("Enter calculations in these formats:")
     print("   • Binary operations: 5 + 3, 10 - 2, 4 * 7, 8 / 2, 9 // 2, 10 % 3, 2 ^ 5")
     print("   • Unary operations : sqrt 25, abs -12, sin 1.57, cos 0, tan 0.78, fact 5")
+    print("   • Trigonometric functions use radians")
     print("\nCommands:")
     print("   menu     -> Show menu")
     print("   history  -> Display history")
@@ -116,28 +117,31 @@ def calculation(user_input,history,un_ops,bin_ops):
 # Unary Operator Calculation
 def unary_calc(parts,un_ops):
     # perform single-operand operation (e.g., sqrt, abs)
-    a,b = parts
-    b = float(b)
-    if b.is_integer():
-        b = int(b)
-    if a == "fact" and not isinstance(b, int):
+    operator, value=parts
+    try:
+        value=float(value)
+    except ValueError:
+        raise ValueError("Unary operand must be a valid number")
+    if value.is_integer():
+        value=int(value)
+    if operator=="fact" and not isinstance(value,int):
         raise ValueError("Factorial only works with integers")
-    if a in un_ops:
-        return un_ops[a](b)
+    if operator in un_ops:
+        return un_ops[operator](value)
     else:
         raise ValueError("Invalid unary operator")
     
 # Binary Operator Calculation
 def binary_calc(parts,bin_ops):
     # perform two-operand operation (e.g., +, -, *)
-    a,s,b=parts
-    a,b=float(a),float(b)
-    if a.is_integer():
-        a=int(a)
-    if b.is_integer():
-        b=int(b)
-    if s in bin_ops:
-        return bin_ops[s](a, b)
+    left,operator,right=parts
+    left,right=float(left),float(right)
+    if left.is_integer():
+        left=int(left)
+    if right.is_integer():
+        right=int(right)
+    if operator in bin_ops:
+        return bin_ops[operator](left,right)
     else:
         raise ValueError("Invalid binary operator")
 

@@ -11,6 +11,23 @@ A command-line calculator built using Python with support for arithmetic operati
 - Exception handling for invalid input
 - Division-by-zero protection
 - Continuous command-line interaction
+- Note:
+  Trigonometric functions (`sin`, `cos`, `tan`) use radians.
+
+## Test Cases
+
+- [ ] 5 + 3
+- [ ] 10 / 0
+- [ ] sqrt 25
+- [ ] sqrt hello
+- [ ] sqrt -1
+- [ ] fact 5
+- [ ] fact 5.5
+- [ ] fact -5
+- [ ] invalid operator
+- [ ] invalid format
+- [ ] history
+- [ ] save/load
 
 ## Technologies Used
 
