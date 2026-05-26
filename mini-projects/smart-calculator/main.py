@@ -22,6 +22,13 @@ def modulus(a,b):
     return a%b
 def power(a,b):
     return math.pow(a,b)
+def factorial(value):
+    if not isinstance(value, int):
+        raise ValueError("Factorial only works with integers")
+
+    if value < 0:
+        raise ValueError("Factorial not defined for negative numbers")
+    return math.factorial(value)
 
 # History Management
 def save_history(history): # Write History to file for longer access
@@ -48,80 +55,99 @@ def clear_history(history): # Clear history from file and list
     print("History cleared!")
 
 # User Interface
-def menu(): # Display menu of  Commands
+def menu():# Display Menu of commands
     print("\n===== SMART CALCULATOR MENU =====")
-    print("Enter calculations in this format:")
-    print("5 + 3")
+    print("Enter calculations in these formats:")
+    print("   • Binary operations: 5 + 3, 10 - 2, 4 * 7, 8 / 2, 9 // 2, 10 % 3, 2 ^ 5")
+    print("   • Unary operations : sqrt 25, abs -12, sin 1.57, cos 0, tan 0.78, fact 5")
     print("\nCommands:")
-    print("menu     -> Show menu")
-    print("history  -> Display history")
-    print("save     -> Save history")
-    print("load     -> Load history")
-    print("clear    -> Clear history")
-    print("exit     -> Exit calculator")
+    print("   menu     -> Show menu")
+    print("   history  -> Display history")
+    print("   save     -> Save history")
+    print("   load     -> Load history")
+    print("   clear    -> Clear history")
+    print("   exit     -> Exit calculator")
+
 
 # Handles commands
-def process_command(user_input,history,operations):
-    if user_input.lower()=="menu":
-            menu()
-            return True
-    elif user_input.lower()=="history":
-        if history:
-            for i in history:
-                print(i)
-        else:
-            print("No history found")
+def process_command(user_input,history,un_ops,bin_ops):
+    cmd = user_input.lower()
+    if cmd=="menu": menu(); return True
+    elif cmd=="history":
+        print("\n".join(history) if history else "No history found")
         return True
-    elif user_input.lower()=="save":
-        save_history(history)
-        return True
-    elif user_input.lower()=="load":
-        load_history(history)
-        return True
-    elif user_input.lower()=="clear":
-        clear_history(history)
-        return True
-    elif user_input.lower()=="exit":
-        return False
-    calculation(user_input,history,operations)
+    elif cmd=="save": save_history(history); return True
+    elif cmd=="load": load_history(history); return True
+    elif cmd=="clear": clear_history(history); return True
+    elif cmd=="exit": return False
+    calculation(user_input,history,un_ops,bin_ops)
     return True
 
 # Handles calculations
-def calculation(user_input,history,operations):
+def calculation(user_input,history,un_ops,bin_ops):
     try: # Exception handling for invalid input
 
-        parts=user_input.split() # parsing input
-        if len(parts)!=3:
-            raise ValueError("Input format should be: number operator number")
-        a,s,b=parts
-        a,b=float(a),float(b)
-        if a.is_integer():
-            a=int(a)
-        if b.is_integer():
-            b=int(b)
-        if s in operations:
-            result=operations[s](a,b)
+        parts = user_input.split()
 
-            if isinstance(result,float) and result.is_integer():
-                result=int(result)
+        # Unary operation
+        if len(parts) == 2:
+            result=unary_calc(parts,un_ops)
+            
 
-            timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            exp=f"[{timestamp}] {a} {s} {b} = {result}"
+        # Binary operation
+        elif len(parts) == 3:
+            result=binary_calc(parts,bin_ops)
 
-            history.append(exp)
-
-            print(result)
         else:
-            print("Invalid operator")
+            raise ValueError("Input format should be: 5 + 3 OR sqrt 25")
+
+        if isinstance(result,float) and result.is_integer():
+            result=int(result)
+
+        timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        exp=f"[{timestamp}] {user_input} = {result}"
+
+        history.append(exp)
+
+        print(result)
     except ValueError as e:
         print(e)
 
+# Unary Operator Calculation
+def unary_calc(parts,un_ops):
+    # perform single-operand operation (e.g., sqrt, abs)
+    a,b = parts
+    b = float(b)
+    if b.is_integer():
+        b = int(b)
+    if a == "fact" and not isinstance(b, int):
+        raise ValueError("Factorial only works with integers")
+    if a in un_ops:
+        return un_ops[a](b)
+    else:
+        raise ValueError("Invalid unary operator")
+    
+# Binary Operator Calculation
+def binary_calc(parts,bin_ops):
+    # perform two-operand operation (e.g., +, -, *)
+    a,s,b=parts
+    a,b=float(a),float(b)
+    if a.is_integer():
+        a=int(a)
+    if b.is_integer():
+        b=int(b)
+    if s in bin_ops:
+        return bin_ops[s](a, b)
+    else:
+        raise ValueError("Invalid binary operator")
+
 # main function
 history=[]
-operations={'+':add, '-': subtract, '*': multiply, '/': divide,'//': floor_divide, '%':modulus, '^': power}
+un_ops={"sqrt": math.sqrt,"abs": abs,"sin": math.sin,"cos": math.cos,"tan": math.tan,"fact": factorial}
+bin_ops={'+':add, '-': subtract, '*': multiply, '/': divide,'//': floor_divide, '%':modulus, '^': power}
 print("Enter 'menu' for details")
 while True:
      user_input=input(">>>").strip()
-     if not process_command(user_input,history,operations):
+     if not process_command(user_input,history,un_ops,bin_ops):
         break
 print("Program Terminated")
