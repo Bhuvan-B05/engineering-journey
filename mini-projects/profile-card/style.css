@@ -1,0 +1,42 @@
+body{
+    font-family: Arial, sans-serif;
+    background-color: #F5F5F5;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh
+}
+.card{
+    background-color: white;
+    color: #222222;
+    width: 500px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(222, 94, 9, 0.373);
+    transition: 0.3s ease;
+}
+.card:hover{
+    transform: translateY(-5px);
+}
+
+h1{
+    text-align: center;
+    margin-bottom:10px;
+}
+
+h3{
+    text-align: center;
+    color: #666666;
+    margin-top:0;
+}
+
+
+a{
+    text-decoration: none;
+    color: #0066CC;
+}
+
+a:hover{
+    color:#7ab8ff;
+}

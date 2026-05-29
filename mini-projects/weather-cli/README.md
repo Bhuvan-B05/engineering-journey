@@ -1,6 +1,6 @@
 # Weather-CLI
 
-A command weather app that returns the geodata such as temperature, windspeed and time using API call from open-metro website
+A command-line weather application that retrieves weather information such as temperature, wind speed, and time using data from the Open-Meteo API.
 
 # Features
 
@@ -19,3 +19,11 @@ A command weather app that returns the geodata such as temperature, windspeed an
 * HTTP Status Code 200 - Indicates that the request was successfully processed by the server and the requested data was returned.
 
 * Nested Dictionaries - Some values inside a dictionary can themselves be dictionaries. This allows hierarchical storage of data. In this project, weather information was extracted from the nested 'current_weather' dictionary.
+
+# Example Output
+
+```text
+Temperature: 33.6 Celsius
+Wind Speed: 9.5 km/h
+Time: 2026-05-29T13:00
+```
